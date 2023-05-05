@@ -13,7 +13,33 @@ import static org.hamcrest.CoreMatchers.is;
 public class CounterResourceTest {
 
     @Test
-    public void testHelloEndpoint() {
+    public void testGetCounter() {
+        given()
+                .when().get("/counter")
+                .then()
+                .statusCode(200)
+                .body("value", equalTo(0));
+    }
+
+
+    @Test
+    public void testIncrementAndDecrement() {
+        given()
+                .when().get("/counter")
+                .then()
+                .statusCode(200)
+                .body("value", equalTo(0));
+
+        given().when().post("/counter/increment").then().statusCode(204);
+
+        given()
+                .when().get("/counter")
+                .then()
+                .statusCode(200)
+                .body("value", equalTo(1));
+
+        given().when().post("/counter/decrement").then().statusCode(204);
+
         given()
                 .when().get("/counter")
                 .then()

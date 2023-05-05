@@ -3,3 +3,8 @@ GET http://localhost:8080/counter
 
 ###
 
+POST http://localhost:8080/counter/increment
+
+###
+
+POST http://localhost:8080/counter/decrement
