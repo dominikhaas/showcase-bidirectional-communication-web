@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Showcase bidirectional communication</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<h1>Showcase Polling</h1>
+
+This page polls every 2s.<br>
+The current value is: <span id="counter-value">?</span>
+<br/>
+<br/>
+<button id="increment-button">++</button><button id="decrement-button">--</button>
+
+<script type="text/javascript">
+    document.getElementById("increment-button").addEventListener('click', () => {
+        fetch('/counter/increment', {method: 'POST'});
+    })
+
+    document.getElementById("decrement-button").addEventListener('click', () => {
+        fetch('/counter/decrement', {method: 'POST'});
+    })
+
+    window.setInterval(async () => {
+        let response = await fetch('/counter');
+        let jsonPayload = await response.json();
+
+        //update value
+        document.getElementById("counter-value").innerHTML = jsonPayload.value;
+    }, 2000)
+</script>
+</body>
+</html>
