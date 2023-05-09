@@ -64,17 +64,17 @@ public class CounterResource {
     @Path("/subscribe")
     @Produces(MediaType.SERVER_SENT_EVENTS)
     public void subscribe(@Context SseEventSink sseEventSink) throws InterruptedException {
-
-        OutboundSseEvent sseEvent = this.eventBuilder
-                .name("welcome")
-                .mediaType(MediaType.TEXT_PLAIN_TYPE)
-                .data("welcome!")
-                .build();
-
-        sseEventSink.send(sseEvent);
+        this.sseBroadcaster.register(sseEventSink);
+        //initial update
+        sseEventSink.send(createSseCounterUpdateEvent());
     }
 
     private void notifySse() {
+        OutboundSseEvent sseEvent = createSseCounterUpdateEvent();
+        this.sseBroadcaster.broadcast(sseEvent);
+    }
+
+    private OutboundSseEvent createSseCounterUpdateEvent() {
         OutboundSseEvent sseEvent = this.eventBuilder
                 .name("counter")
                 .id(UUID.randomUUID().toString())
@@ -83,7 +83,6 @@ public class CounterResource {
                 .reconnectDelay(4000)
                 .comment("counter changed")
                 .build();
-
-        this.sseBroadcaster.broadcast(sseEvent);
+        return sseEvent;
     }
 }
