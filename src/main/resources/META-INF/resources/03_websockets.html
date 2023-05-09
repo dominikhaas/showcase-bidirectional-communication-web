@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Showcase bidirectional communication</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<h1>Showcase SSE</h1>
+
+This page is updated using Web Sockets.<br>
+The current value is: <span id="counter-value">?</span>
+<br/>
+<br/>
+<button id="increment-button">++</button>
+<button id="decrement-button">--</button>
+
+<script type="text/javascript">
+
+    let socket = new WebSocket("ws://" + location.host + "/counterSocket")
+    socket.onopen = function () {
+        console.log("Opened connection")
+    }
+
+    socket.onerror = function (error) {
+        console.log("error: " + error)
+    }
+
+    socket.onclose = function () {
+        console.log("closed connection")
+    }
+
+    socket.onmessage = function (m) {
+        console.log("Got message: " + JSON.parse(m.data).value);
+        //update value
+        document.getElementById("counter-value").innerHTML = JSON.parse(m.data).value;
+    };
+
+    document.getElementById("increment-button").addEventListener('click', () => {
+        socket.send("increment");
+    })
+
+    document.getElementById("decrement-button").addEventListener('click', () => {
+        socket.send("decrement");
+    })
+
+
+</script>
+</body>
+</html>
