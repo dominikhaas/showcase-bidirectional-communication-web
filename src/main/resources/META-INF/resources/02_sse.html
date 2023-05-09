@@ -38,13 +38,13 @@ The current value is: <span id="counter-value">?</span>
         console.error('SSE error:', event);
     });
 
-    eventSource.addEventListener('message', (event) => {
+
+    eventSource.addEventListener('counter', (event) => {
         console.log('SSE message received:', event.data);
+        //update value
+        document.getElementById("counter-value").innerHTML = JSON.parse(event.data).value;
     });
 
-    eventSource.onmessage = (e) => {
-        console.log(`Received SSE event: ${e}`);
-    };
 </script>
 </body>
 </html>
