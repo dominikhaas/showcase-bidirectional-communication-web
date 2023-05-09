@@ -9,8 +9,8 @@ import java.util.List;
 @ApplicationScoped
 @Getter
 public class CounterService {
-    private int counter = 0;
     private final List<Runnable> listeners = new ArrayList<>();
+    private int counter = 0;
 
     public void increment() {
         this.counter++;
